@@ -1,77 +1,40 @@
 <template>
   <div class="App">
-    <AppHeader />
-
-    <Description />
-
-    <div class="container">
-      <div class="users"><Users /></div>
-      <div class="todos"><Todos /></div>
-    </div>
-
-    <AppFooter />
+    {{ emptyTodoAssigneesLength }}
   </div>
 </template>
 
 <script>
-import data from '../data'
+import Todo from '@/models/Todo'
 import store from '../store'
-import AppHeader from './AppHeader'
-import Description from './Description'
-import Users from './Users'
-import Todos from './Todos'
-import AppFooter from './AppFooter'
 
 export default {
   store,
 
-  components: {
-    AppHeader,
-    Description,
-    Users,
-    Todos,
-    AppFooter
-  },
-
   data () {
     return {
-      yay: 'Hello!'
+      emptyTodoAssigneesLength: null
     }
   },
 
   created () {
     // Here we are stubbing the initial data. In the real world, this
     // should be the response from the API Backend.
-    const initialData = data
-
+    const initialData = [
+      {
+        id: 1,
+        title: 'Create awesome application!',
+        done: false,
+        assignees: []
+      }
+    ]
     this.$store.dispatch('entities/todos/create', { data: initialData })
   },
 
   mounted () {
-    this.$store.dispatch('entities/users/test')
+    // Should set emptyTodoAssigneesLength to 0
+    // Instead => Cannot read property 'length' of undefined
+    this.emptyTodoAssigneesLength = Todo.query().withAllRecursive().find(1).assignees.length
   }
 }
 </script>
-
-<style src="../styles/bootstrap.css"></style>
-
-<style scoped>
-.App {
-  padding: 96px 48px 128px;
-}
-
-.container {
-  display: flex;
-  margin: 0 auto;
-  width: 960px;
-}
-
-.users {
-  padding-right: 48px;
-  width: calc(100% / 3);
-}
-
-.todos {
-  width: calc((100% / 3) * 2);
-}
-</style>

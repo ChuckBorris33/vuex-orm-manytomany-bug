@@ -1,5 +1,6 @@
 import { Model } from '@vuex-orm/core'
 import Todo from './Todo'
+import TodoUser from './TodoUser'
 
 export default class User extends Model {
   static entity = 'users'
@@ -8,7 +9,7 @@ export default class User extends Model {
     return {
       id: this.increment(),
       name: this.string(''),
-      todos: this.hasMany(Todo, 'user_id')
+      todos: this.belongsToMany(Todo, TodoUser, 'user_id', 'todo_id')
     }
   }
 }
